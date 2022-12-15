@@ -11,11 +11,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import SfLogo from "../../images/SF_Logo.png";
 import { Container } from "@mui/material";
 import { InputAdornment, Paper } from "@mui/material";
-import { LoginOutlined, PasswordOutlined } from "@mui/icons-material";
+import { FacebookOutlined, LoginOutlined, Mail, PasswordOutlined } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import PageLayout from "./Layout";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -34,14 +35,26 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // axios.get();
+    axios.get('', {
+      params: {
+        user: data.get("userId"),
+        password:data.get("password")
+      }
+    }).then((response) => {
+      if(response===true){
+        Cookies.set("islogin", true);
+        navigate("/raki/home");
+      }
+    });
     console.log({
       userId: data.get("userId"),
       password: data.get("password"),
     });
-    Cookies.set("islogin", true);
-    navigate("/raki/home");
   };
-
+const authenticate =()=>{
+  
+}
   return Cookies.get("islogin") ? (
     <PageLayout />
   ) : (
@@ -86,7 +99,7 @@ export default function Login() {
               square="true"
               sx={{
                 borderColor: "#AAAAAA",
-                backgroundColor: "#b1e3dc",
+                backgroundColor: "lightslategrey",
                 borderRadius: "80%",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
@@ -128,10 +141,10 @@ export default function Login() {
                             required
                             fullWidth
                             id="userId"
-                            label="User ID"
+                            label="Id"
                             name="userId"
                             autoComplete="userId"
-                            placeholder="Enter Employee Id / Mobile Number"
+                            placeholder="User Id"
                             size="small"
                             autoFocus
                             sx={{ color: "#7F7F7F" }}
@@ -153,7 +166,7 @@ export default function Login() {
                             type="password"
                             id="password"
                             autoComplete="new-password"
-                            placeholder="Enter the Password"
+                            placeholder="Password"
                             size="small"
                             sx={{ color: "#7F7F7F" }}
                             InputProps={{
@@ -171,9 +184,14 @@ export default function Login() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                         size="small"
+                        onClick={authenticate}
                       >
                         Login
                       </Button>
+                      <div sx = {{padding:'8px'}}>
+                       <Button variant="outlined" startIcon={<Mail/>} > Login With Google</Button> 
+                       <Button variant="outlined" startIcon={<FacebookOutlined/>} > Login With Facebook</Button> 
+                      </div>
                     </Box>
                   </Box>
                 </Container>

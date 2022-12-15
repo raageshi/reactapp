@@ -34,9 +34,9 @@ const Layout = () => {
   }
   return (
     <div id="maindiv">
-      <Stack sx={{ height: "calc(100% - 82px)" }}>
+      <Stack >
         <ResponsiveAppBar />
-        <MenuList></MenuList>
+       
         <Stack
           direction="row"
           sx={{
