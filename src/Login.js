@@ -34,23 +34,45 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const datas = new FormData(event.currentTarget);
     // axios.get();
-    axios.get('', {
-      params: {
-        user: data.get("userId"),
-        password:data.get("password")
-      }
-    }).then((response) => {
-      if(response===true){
+
+
+    axios({
+      method: "POST",
+      url: "http://localhost:8090/raki/authendicate",
+      headers: {"Content-Type": "application/json; charset=UTF-8",
+        "x-access-key": datas,
+        "x-access-token": '',
+      },
+      data: datas,
+    })
+    .then(res => {
+      if(res.data==='authendicated'){
         Cookies.set("islogin", true);
         navigate("/raki/home");
       }
+    })
+    .catch(err => {
+      console.log("error in request", err);
     });
-    console.log({
-      userId: data.get("userId"),
-      password: data.get("password"),
-    });
+
+
+    // axios.get('http://localhost:8090/raki/authendicate', {
+    //   params: {
+    //     user: data.get("userId"),
+    //     pass:data.get("password")
+    //   }
+    // }).then((response) => {
+    //   if(response==='authendicated'){
+    //     Cookies.set("islogin", true);
+    //     navigate("/raki/home");
+    //   }
+    // });
+    // console.log({
+    //   userId: data.get("userId"),
+    //   password: data.get("password"),
+    // });
   };
 const authenticate =()=>{
   
@@ -182,15 +204,15 @@ const authenticate =()=>{
                       <Button
                         type="submit"
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 2 ,color:'#fff' , fontWeight:'bold',background:'cadetblue', fontWeight:'bold'}}
                         size="small"
                         onClick={authenticate}
                       >
                         Login
                       </Button>
-                      <div sx = {{padding:'8px'}}>
-                       <Button variant="outlined" startIcon={<Mail/>} > Login With Google</Button> 
-                       <Button variant="outlined" startIcon={<FacebookOutlined/>} > Login With Facebook</Button> 
+                      <div style = {{padding:'8px',color:'#fff'}}>
+                       <Button sx = {{padding:'8px',color:'#fff',borderColor:'cyan',background:'cadetblue', fontWeight:'bold'}} variant="outlined" startIcon={<Mail/>} > Login With Google</Button> 
+                       <Button sx = {{padding:'8px',color:'#fff', fontWeight:'bold' ,borderColor:'cyan',background:'cadetblue'}} variant="outlined" startIcon={<FacebookOutlined/>} > Login With Facebook</Button> 
                       </div>
                     </Box>
                   </Box>
