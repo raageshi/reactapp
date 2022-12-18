@@ -1,19 +1,39 @@
 import { Box, TextField } from '@mui/material';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
+import axios from 'axios';
 export default function Dashboard() {
+const [rows,setRows] = useState([]);
+  useEffect(()=>{
+    axios({
+      method: "POST",
+      url: "http://localhost:8090/raki/getData",
+      headers: {"Content-Type": "application/json; charset=UTF-8",
+        "x-access-key": "",
+        "x-access-token": '',
+      },
+    })
+    .then(res => {
+      if(res.data){
+        setRows(res.data);
+      }
+    })
+    .catch(err => {
+      console.log("error in request", err);
+    });
+  },[])
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'name', headerName: 'Name', width: 90 },
   {
-    field: 'firstName',
-    headerName: 'First name',
+    field: 'mail',
+    headerName: 'Mail',
     width: 150,
     editable: false,
   },
   {
-    field: 'lastName',
-    headerName: 'Last name',
+    field: 'mobile',
+    headerName: 'Mobile',
     width: 150,
     editable: false,
   },
@@ -25,25 +45,29 @@ const columns = [
     editable: false,
   },
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
+    field: 'location',
+    headerName: 'Location',
+    description: 'User Ip location',
+    sortable: false,
+    width: 160,
+  },
+  {
+    field: 'visited',
+    headerName: 'Last Visited',
+    description: 'Last Visited',
+    sortable: false,
+    width: 160,
+  },
+  {
+    field: 'address',
+    headerName: 'Address',
+    description: 'Address of the user',
     sortable: false,
     width: 160,
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', ip: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', ip: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', ip: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', ip: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', ip: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, ip: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', ip: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', ip: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', ip: 65 },
-];
+
     return (
         <div>
           <Box>
